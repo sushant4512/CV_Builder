@@ -1,11 +1,10 @@
 package com.cv_builder.cv_builder.config;
 
 
-import com.cv_builder.cv_builder.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -31,18 +30,21 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register").permitAll()
-                        .requestMatchers("/api/users/login").permitAll()
-                        .requestMatchers("/api/users/forgot-password").permitAll()
-                        .requestMatchers("/api/users/reset-password").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/forgot-password").permitAll()
+                        .requestMatchers("/set-password").permitAll()
+                        .requestMatchers("/regenerate-otp").permitAll()
+                        .requestMatchers("/verify-account").permitAll()
                         .requestMatchers("/api/events").permitAll()
                         .requestMatchers("/api/leave-applications").permitAll()
                         .requestMatchers("/api/blogposts").permitAll()
                         .requestMatchers("/api/reviews").authenticated()
                         .requestMatchers("api/reviews/{id}").permitAll()
                         .anyRequest().authenticated()
+
                 )
-                .formLogin(withDefaults())
+                //.formLogin(withDefaults())
                 .httpBasic(withDefaults());
 
         return http.build();

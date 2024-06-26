@@ -1,54 +1,46 @@
 package com.cv_builder.cv_builder.controller;
 
-
-import com.cv_builder.cv_builder.dto.PasswordResetDto;
-import com.cv_builder.cv_builder.dto.PasswordResetRequestDto;
-import com.cv_builder.cv_builder.dto.UserLoginDto;
-import com.cv_builder.cv_builder.dto.UserRegistrationDto;
-import com.cv_builder.cv_builder.entity.User;
+import com.cv_builder.cv_builder.dto.LoginDto;
+import com.cv_builder.cv_builder.dto.RegisterDto;
 import com.cv_builder.cv_builder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto registrationDto) {
-        userService.registerUser(registrationDto.getUsername(), registrationDto.getPassword(), registrationDto.getEmail());
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        return new ResponseEntity<>(userService.register(registerDto), HttpStatus.OK);
     }
 
+    @PutMapping("/verify-account")
+    public ResponseEntity<String> verifyAccount(@RequestParam String email,
+                                                @RequestParam String otp) {
+        return new ResponseEntity<>(userService.verifyAccount(email, otp), HttpStatus.OK);
+    }
+    @PutMapping("/regenerate-otp")
+    public ResponseEntity<String> regenerateOtp(@RequestParam String email) {
+        return new ResponseEntity<>(userService.regenerateOtp(email), HttpStatus.OK);
+    }
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDto loginDto) {
-        Optional<User> user = userService.loginUser(loginDto.getUsername(), loginDto.getPassword());
-        if (user.isPresent()) {
-            return ResponseEntity.ok("Login successful");
-        }
-        return ResponseEntity.status(401).body("Invalid credentials");
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody PasswordResetRequestDto requestDto) {
-        userService.generatePasswordResetToken(requestDto.getEmail());
-        return ResponseEntity.ok("Password reset token sent to email");
+    public ResponseEntity<String> forgotPassword(@RequestParam String email){
+        return new ResponseEntity<>(userService.forgotPassword(email),HttpStatus.OK);
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetDto resetDto) {
-        Optional<User> user = userService.resetPassword(resetDto.getToken(), resetDto.getNewPassword());
-        if (user.isPresent()) {
-            return ResponseEntity.ok("Password reset successful");
-        }
-        return ResponseEntity.status(400).body("Invalid token");
+    @PutMapping("/set-password")
+    public ResponseEntity<String> setPassword(@RequestParam String email, @RequestHeader String newPassword){
+        return new ResponseEntity<>(userService.setPassword(email, newPassword),HttpStatus.OK);
     }
 }
