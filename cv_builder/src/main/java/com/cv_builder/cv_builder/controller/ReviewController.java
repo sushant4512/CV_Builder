@@ -31,11 +31,11 @@ public class ReviewController {
         }
     }
 
+
     @PostMapping
     public Review createReview(@RequestBody Review review) {
         return reviewService.createReview(review);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review reviewDetails) {
         Optional<Review> review = reviewService.getReviewById(id);
