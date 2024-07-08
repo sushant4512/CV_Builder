@@ -23,7 +23,7 @@ public class ApplicationService {
     }
 
     public Application createApplication(Application application, MultipartFile resume) throws IOException {
-        application.setResume(resume.getBytes());
+        application.setResume(resume.getResource().getFilename());
         return applicationRepository.save(application);
     }
 
@@ -33,7 +33,7 @@ public class ApplicationService {
             application.setApplicantName(applicationDetails.getApplicantName());
             application.setEmail(applicationDetails.getEmail());
             application.setJobId(applicationDetails.getJobId());
-            application.setResume(resume.getBytes());
+            application.setResume(resume.getResource().getFilename());
             return applicationRepository.save(application);
         }
         return null;

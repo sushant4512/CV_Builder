@@ -15,5 +15,5 @@ public class Application {
     private Long jobId;
 
     @Lob
-    private byte[] resume;
+    private String resume;
 }

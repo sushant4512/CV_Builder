@@ -14,14 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlogPost {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String content;
     private String author;
+    @Lob
+    private String photo;
 
-    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL)
-    private List<Photo> photos;
 
 }
