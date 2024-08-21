@@ -45,6 +45,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/applications/{id}").permitAll()
                         .requestMatchers("/api/jobs").permitAll()
                         .requestMatchers("/api/jobs/{id}").permitAll()
+                        .requestMatchers("/api/queries").permitAll()
+                        .requestMatchers("/api/queries/{id}").permitAll()
+                        .requestMatchers("/api/profiles").permitAll()
+                        .requestMatchers("/api/profiles/{id}").permitAll()
                         .anyRequest().authenticated()
 
                 )
